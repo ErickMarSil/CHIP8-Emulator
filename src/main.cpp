@@ -1,6 +1,7 @@
 #include <iostream>
-using namespace std;
+#include <SDL2/SDL.h>
 
 int main(){
-    return 0;
+	std::cout << "Hello world \n";
+	return 0;
 }
