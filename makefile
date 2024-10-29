@@ -3,6 +3,9 @@
 # Compiler
 CC = g++
 
+# Flags
+CFLAGS = -Wall -Wextra -Werror
+
 # Targets names
 tgMain = all
 
@@ -11,4 +14,4 @@ srcMain = src/main.cpp
 srcMainDest = src/main
 
 all: 
-	$(CC) $(srcMain) -o $(srcMainDest)
+	$(CC) $(srcMain) -o $(srcMainDest) $(CFLAGS)

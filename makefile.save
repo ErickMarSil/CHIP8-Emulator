@@ -1,0 +1,9 @@
+# Makefile
+
+# Compiler
+CC = g++
+
+# Compiler flags
+
+all:
+	$(CC) src/main.cpp -o main
