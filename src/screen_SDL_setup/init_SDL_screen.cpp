@@ -10,7 +10,7 @@ struct{
 } flags_sdl;
 
 bool setup(){
-    bool result_initialize = False;
+    bool result_initialize = false;
     // init screen config by SDL
     init_sdl_subsystem();
     // return screen config well done
