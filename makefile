@@ -7,12 +7,14 @@ CC = g++
 CFLAGS = -Wall -Wextra -Werror
 
 # Targets names
-tgMain = all
+tgMAIN = main.o
 
-# Sources
-srcMain = src/main.cpp
-srcMainDest = src/main
-srcScreenSetUp = src/sreen_SDL_setup/init_SDL_screen.cpp
+# Source names
+srcMAIN_FILE = Source/main.cpp
+srcMAIN_OBJECT = Source/main.o
 
-all: 
-	$(CC) $(srcMain) -o $(srcMainDest) $(CFLAGS)
+# Dependencies names 
+dpINIT_SDL_SCREEN_CPP = Source/Src/init_SDL_screen.cpp
+
+$(tgMAIN) : $(dpINIT_SDL_SCREEN_CPP)
+	$(CC) $(srcMAIN_FILE) -o $(srcMAIN_OBJECT) $(CFLAGS)

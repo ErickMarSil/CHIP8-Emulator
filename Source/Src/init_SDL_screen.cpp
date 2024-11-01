@@ -1,5 +1,6 @@
 #include <iostream>
 #include <SDL2/SDL.h>
+#include "../Headers/init_SDL_screen.hpp"
 
 using namespace std;
 
