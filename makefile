@@ -1,20 +1,14 @@
-# Makefile
+# Variáveis
+CXX = g++
+CXXFLAGS = -Wall -g
+LDFLAGS = -lSDL2
 
-# Compiler
-CC = g++
+# Alvo de build
+all: main
 
-# Flags
-CFLAGS = -Wall -Wextra -Werror
+main: Source/main.cpp
+	$(CXX) $(CXXFLAGS) Source/main.cpp -o Source/main $(LDFLAGS)
 
-# Targets names
-tgMAIN = main.o
-
-# Source names
-srcMAIN_FILE = Source/main.cpp
-srcMAIN_OBJECT = Source/main.o
-
-# Dependencies names 
-dpINIT_SDL_SCREEN_CPP = Source/Src/init_SDL_screen.cpp
-
-$(tgMAIN) : $(dpINIT_SDL_SCREEN_CPP)
-	$(CC) $(srcMAIN_FILE) -o $(srcMAIN_OBJECT) $(CFLAGS)
+# Limpeza
+clean:
+	rm -f main
