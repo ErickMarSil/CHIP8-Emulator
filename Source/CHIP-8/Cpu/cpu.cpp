@@ -8,7 +8,7 @@ typedef uint8 uint16[3]; // 32 bytes type
 
 struct CPU{
     Registers* registers;
-
+    
 };
 struct Registers{
     uint8* PC[2]; // Program counter

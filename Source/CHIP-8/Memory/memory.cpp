@@ -2,36 +2,39 @@
 
 using namespace std;
 
-typedef char uint8 = undefined char; // byte type variable
+typedef char uint8; // byte type variable
+typedef int cycle; // clock cycles
 
 const int MAX_MEMORY = 4096; // max memory for slots
-const int STACK_MEMORY = 96; // stack memory space
-const int HEAP_MEMORY = MAX_MEMORY - STACK_MEMORY; // heap memory space
+
+enum type_memmory{
+    HEAP_T,
+    STACK_T
+};
 
 struct Memory{ // memory structure to inherit
     // using opcode = Opcode();
+    // creates object
+    uint8 Memory_Slots[MAX_MEMORY]; // stack memory slots
 
-    // Functions
-    void clear_memory(){
-        // clear memory (heap and stack)
-    }
-    uint8* read_memory(uint8& address){
-        // access memory from address
-    }
-    uint8* write_memory(uint8& address, uint8 content[]){
-        // write content into memory
-    }
-    
-};
-
-struct Stack{
-    uint8 stack_memory[MAX_MEMORY]; // stack memory slots
-    void clear_stack(){
-        for (uint8 i = 0; i < stack_memory.size() ; i++){
-
+    // FUNCTIONS
+    void clear_memory(){ // clear memory
+        for (uint8 i = 0; i < MAX_MEMORY ; i++){
+            Memory_Slots[i] = 0x0; // reset the stack
         }
     }
-};
-struct Heap{
-    uint8 heap_memory[HEAP_MEMORY]; // heap memory slots
+    void init_memory(){ // initialize memory
+        // initialize memory
+        clear_memory();
+    }
+
+    uint8 fetch_memory(uint8& address, cycle& Clock,  type_memmory& TypeM){ // access memory from address
+        uint8 Content = Memory_Slots[address];
+        Clock--;
+        return Content;
+    }
+    uint8* write_memory(uint8& address, uint8 content[]){ // write content into memory
+        
+    }
+    
 };
