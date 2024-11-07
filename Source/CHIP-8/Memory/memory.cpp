@@ -1,16 +1,16 @@
 #include <iostream>
+#include <Include/CHIP-8/MEMORY_H.hpp>
 
 using namespace std;
 
-typedef char uint8; // byte type variable
+typedef char uint8; // 8 bits type variable
+typedef short uint16; // 16 bits type variable
+typedef int uint32; // 32 bits type variable
+typedef long uint64; // 64 bits type variable
 typedef int cycle; // clock cycles
 
-const int MAX_MEMORY = 4096; // max memory for slots
-
-enum type_memmory{
-    HEAP_T,
-    STACK_T
-};
+constexpr uint64 MAX_MEMORY = 4096; // max memory for slots
+constexpr uint64 STACK_ADDRESS = 0xEA0; // address from stack
 
 struct Memory{ // memory structure to inherit
     // using opcode = Opcode();
@@ -27,14 +27,9 @@ struct Memory{ // memory structure to inherit
         // initialize memory
         clear_memory();
     }
-
-    uint8 fetch_memory(uint8& address, cycle& Clock,  type_memmory& TypeM){ // access memory from address
-        uint8 Content = Memory_Slots[address];
-        Clock--;
-        return Content;
-    }
-    uint8* write_memory(uint8& address, uint8 content[]){ // write content into memory
-        
+    void add_stack(uint8& addr, uint32& data, cycle& Cycles){
+        Memory_Slots[addr] = data; // set data into stack
+        Cycles--; // remove cycle
     }
     
 };
