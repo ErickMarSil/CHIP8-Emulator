@@ -1,5 +1,6 @@
 #include <iostream>
-#include <Include/CHIP-8/MEMORY_H.hpp>
+#include <string>
+#include <MEMORY_H.h>
 
 using namespace std;
 
@@ -29,6 +30,10 @@ struct Registers{
           V8, V9, VA, VB,
           VC, VD, VE, VF;
     
+    void Execute(string instruction){
+        // execute script
+    }
+
     void init_CPU(){ // start up cpu
         init_registers();
     }
@@ -42,30 +47,39 @@ struct Registers{
     }
 };
 struct Opcodes{
-    void CALL_ADDRS(uint16& PC, uint8& SP, Memory& mem, cycle& Clock){ // Set pointer counter into stack
+    void CALL_ADDRS(uint16& PC, uint16& SP, Memory mem, cycle& Clock){ // Set pointer counter into stack
         SP++;
         mem.add_stack(SP, PC, Clock);
         Clock--;
     }
-    void SE_VX(uint16& PC, uint8& VX, uint8& KK, Memory& mem, cycle& Clock){ // IF VX register and KK adds are equals
-        if((VX | mem[KK]) == 0){
+    void SE_VX(uint16& PC, uint8 VX, uint8& KK, Memory mem, cycle& Clock){ // IF VX register and KK adds are equals
+        if((VX | mem.Memory_Slots[KK]) == 0){ // checks is equal 
             PC += 2;
             Clock--;
         }
     }
-    void SEN_VX(uint16& PC, uint8& VX, uint8& KK, Memory& mem, cycle& Clock){ // IF VX register and KK adds are not equals
-        if((VX | mem[KK]) != 0){
+    void SEN_VX(uint16& PC, uint8 VX, uint8 KK, Memory mem, cycle& Clock){ // IF VX register and KK adds are not equals
+        if((VX | mem.Memory_Slots[KK]) != 0){ // checks is different
             PC += 2;
             Clock--;
         }
     }
-    void SEN_VX(uint16& PC, uint8& VX, uint8& VY, cycle& Clock){ // IF VX and VY registers are not equals
-        if((VX | VY) != 0){
+    void SEN_VX(uint16& PC, uint8 VX, uint8 VY, cycle& Clock){ // IF VX and VY registers are not equals
+        if((VX | VY) == 0){ // checks is equal
             PC += 2;
             Clock--;
         }
     }
-    void LD_VX(uint16& PC, ){ // Loads to register VX the value in KK from memory
+    void LD_VX(uint16& PC, uint8* VX, uint8* addr, Memory mem, cycle& Clock){ // Loads to register VX the value in KK from memory
+        VX = mem.Memory_Slots[addr];
+        PC++;
+        Clock--;
+    }
+    void ADD_VX(uint16& PC, uint8& VX, uint64 byte, Memory& mem, cycle& Clock){ // Add to VX the willed value 
+        VX = VX + byte; // Add at VX to Byte
+        PC++;
+        Clock--;
+    }
 
-    }
+    // Others    
 };

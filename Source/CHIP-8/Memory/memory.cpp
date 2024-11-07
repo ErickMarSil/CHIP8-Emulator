@@ -1,5 +1,5 @@
 #include <iostream>
-#include <Include/CHIP-8/MEMORY_H.hpp>
+#include "MEMORY_H.h"
 
 using namespace std;
 
@@ -27,9 +27,17 @@ struct Memory{ // memory structure to inherit
         // initialize memory
         clear_memory();
     }
-    void add_stack(uint8& addr, uint32& data, cycle& Cycles){
-        Memory_Slots[addr] = data; // set data into stack
+    void add_stack(uint16& SP, uint16& data, cycle& Cycles){
+        if (SP > (MAX_MEMORY)&& SP < (MAX_MEMORY - STACK_ADDRESS)){
+            return;
+        }
+        Memory_Slots[SP] = data; // set data into stack
         Cycles--; // remove cycle
     }
-    
+    void pop_byte(){
+
+    }
+    void push_byte(){
+
+    }
 };
