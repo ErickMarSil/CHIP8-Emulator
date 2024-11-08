@@ -1,26 +1,20 @@
 #include <iostream>
+#include <cstdint>
 #include "MEMORY_H.h"
 
-using namespace std;
+constexpr uint64_t MAX_MEMORY = 1024*4; // max memory for slots
+constexpr uint8_t MAX_STACK = 16*2; // address from stack
 
-typedef char uint8; // 8 bits type variable
-typedef short uint16; // 16 bits type variable
-typedef int uint32; // 32 bits type variable
-typedef long uint64; // 64 bits type variable
-typedef int cycle; // clock cycles
+struct MEMORY{ // memory structure to inherit
+    uint8_t MEMORY::RAM[MAX_MEMORY];
+    uint8_t MEMORY::STACK[MAX_STACK];
 
-constexpr uint64 MAX_MEMORY = 4096; // max memory for slots
-constexpr uint64 STACK_ADDRESS = 0xEA0; // address from stack
-
-struct Memory{ // memory structure to inherit
-    uint8 Memory::RAM[MAX_MEMORY]; // stack memory slots
-
-    void Memory::clear_memory(){
-        for (uint8 i = 0; i < MAX_MEMORY ; i++){
-            RAM[i] = 0x0;
+    void MEMORY::clear_memory(){
+        for (uint8_t& slot : MEMORY::RAM){
+            slot = 0x0;
         }
     }
-    void Memory::init_memory(){
+    void MEMORY::init_memory(){
         clear_memory();
     }
 };
