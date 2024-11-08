@@ -1,13 +1,21 @@
 #ifndef MEMORY_H
 #define MEMORY_H
 
-constexpr uint64 MAX_MEMORY = 4096;
+constexpr uint64_t MAX_MEMORY = 4096;
 
-struct Memory {
-    uint8 Memory_Slots[MAX_MEMORY];
+struct MEMORY {
+    /*
+    RAM slots begin to end 0x0 -> 0x1000 (4096 bytes)
+    */
+    uint8_t RAM[MAX_MEMORY];
+    /*
+    CLEAR all memory slots from 0x0 to 0x1000
+    */
     void clear_memory();
+    /*
+    INIT memory reseting it´s value
+    */
     void init_memory();
-    void add_stack(uint16& SP, uint32& data, cycle& Cycles);
 };
 
 #endif
