@@ -31,7 +31,7 @@ struct MEMORY {
         return MEMORY::STACK[addr];
     }
     
-    uint8_t FetchHEAP(){
+    uint8_t FetchHEAP(uint16_t& addr){
         return MEMORY::RAM[addr];
     }
 

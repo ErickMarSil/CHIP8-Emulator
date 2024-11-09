@@ -12,16 +12,6 @@ private:
     constexpr uint8_t  MAX_CONTROLDATA = 16*2;
 
 public:
-    /*Enum others type*/
-    enum FETCH_TYPE:
-        fFmBuff,
-        fKeyB,
-        fControllD
-    enum WRITE_TYPE:
-        wFmBuff,
-        wKeyB,
-        wControllD
-
     struct MEMORY {
         /*
         RAM slots begin to end 0x0 -> 0x1000 (4096 bytes)
@@ -50,9 +40,9 @@ public:
             * RAM
             * HEAP*/
         uint8_t FetchRAM(uint16_t& addr);
-        /* Can write byte from heap or ram slots:
-            * RAM
-            * HEAP*/
+        uint8_t FetchHEAP(uint16_t& addr);
+
+        /* Write into RAM or STACK memory*/
         void WriteRAM(uint16_t& addr, uint16_t data);
     };
 

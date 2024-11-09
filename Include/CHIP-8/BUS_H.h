@@ -18,7 +18,6 @@ private:
 
 public:
     struct BUS{
-        uint8_t& RAM = memory.RAM;
         /*
         This BUS is just for memory STACK purpouse and only
         */
