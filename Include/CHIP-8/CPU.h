@@ -5,15 +5,6 @@
 #define CPU_H
 
 public:
-    enum OPCODES:
-        CALL, /* Calls subroutine at nnn address */
-        SEB,  /* Checks if Register is equal to Byte(addr) */ 
-        SEN,  /* Checks if Register is NOT equal to Byte(addr) */ 
-        SER,  /* Checks if Register X is equal to register Y */ 
-        LD,   /* Loads into Register X the value in kk */ 
-        ADD,  /* Add the value Register Y with kk into X */
-
-public:
     struct CPU{
 
         uint8_t VRegs[16]; /* Register V0 to VF */
@@ -23,11 +14,18 @@ public:
         uint8_t ST; /* Register "Sounder Timer" */
         uint8_t PC; /* Register "Pointer Counter" */
 
+        /*OPCODES DECLARATION*/
+        uint16_t SYS();  uint16_t CLS(); uint16_t RET();  uint16_t JP(); 
+        uint16_t CALL(); uint16_t SE();  uint16_t SEN();  uint16_t LD();
+        uint16_t ADD();  uint16_t OR();  uint16_t AND();  uint16_t XOR(); 
+        uint16_t SUB();  uint16_t SHR(); uint16_t SUBN(); uint16_t SHL();
+        uint16_t SNE();
+
         // Read Byte(index) instruction from PC location
         // Use the Byte(index) to get instruction and nums of Cycles
         // Read rest of bytes that i need
         // Execute the instruction
-        
+
     };
 
 #endif

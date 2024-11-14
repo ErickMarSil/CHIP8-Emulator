@@ -3,59 +3,20 @@
 #include <BUS_H.h>
 #include <MEMORY_H.h>
 
-struct BUS{
-    uint8_t ReadStack(uint16_t& addr){
-        return FetchRAM(addr);
-    }
-    void WriteStack(uint16_t& addr, uint8_t data, uint16_t SP){
-        WriteRAM(addr);
-        SP++;
-        return;
-    }
-};
-struct BUS_O{
-    void Fetch_FrameBuffer(uint16_t& addr){
-        if (addr >= &FRAMEBUFFER[FRAMEBUFFER.size()-1] && addr <= &FRAMEBUFFER.begin()){
-            return FRAMEBUFFER[addr];
-        }
-    }
-    uint8_t Write_FrameBuffer(uint16_t& addr, uint8_t data){
-        if (addr >= &FRAMEBUFFER[FRAMEBUFFER.size()-1] && addr <= &FRAMEBUFFER.begin()){
-            FRAMEBUFFER[addr] = data;
-        }
-        return;
-    }
-    void Fetch_KeyBoard(uint16_t& addr){
-        if (addr >= &KEYBOARD[KEYBOARD.size()-1] && addr <= &KEYBOARD.begin()){
-            return KEYBOARD[addr];
-        }
-    }
-    uint8_t Write_KeyBoard(uint16_t& addr, uint8_t data){
-        if (addr >= &KEYBOARD[KEYBOARD.size()-1] && addr <= &KEYBOARD.begin()){
-            KEYBOARD[addr] = data;
-        }
-        return;
-    }
-    void Fetch_ControllData(uint16_t& addr){
-        if (addr >= &CONTROLDATA[CONTROLDATA.size()-1] && addr <= &CONTROLDATA.begin()){
-            return CONTROLDATA[addr];
-        }
-    }
-    uint8_t Write_ControllData(uint16_t& addr, uint8_t data){
-        if (addr >= &CONTROLDATA[CONTROLDATA.size()-1] && addr <= &CONTROLDATA.begin()){
-            CONTROLDATA[addr] = data;
-        }
-        return;
-    }
 
-    uint16_t (*Write_Funcs[3])() = {Fetch_FrameBuffer, Fetch_KeyBoard, Fetch_ControllData};
-    uint16_t (*Fetch_Funcs[3])() = {Write_ControllData, Write_KeyBoard, Write_ControllData};
+class BUS{
+    uint16_t* addressLimits[5];
 
-    uint8_t Read(FETCH_TYPE memT, uint16_t& addr){
-        Fetch_Funcs[memT]();
-        return;
+    void InitBus(){
+        BUS::addressLimits[0] = 
     }
-    void Write(WRITE_TYPE memT, uint16_t& addr, uint8_t data){
-        return Write_Funcs[memT]();
+    void ConnectMem(){
+
     }
-};
+    uint8_t Fetch_Mem(uint16_t& addr, DeviceConn deviceT){
+
+    }
+    void Write_Mem(uint16_t& addr, DeviceConn deviceT, uint16_t data){
+
+    }
+}
