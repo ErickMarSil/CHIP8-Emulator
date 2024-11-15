@@ -1,22 +1,24 @@
 #include <iostream>
 #include <cstdint>
-#include "MEMORY_H.h"
+#include "MEMORY.h"
 
 
-class MEMORY{
-    void Init_Memory(){
-        Reset_Memory();
-    }
+MEMORY::MEMORY(){
+    Reset_Memory();
+}
+void MEMORY::Reset_Memory(){
+    for (int i : MEMORY::RAM){i = 0x00;}
+}
 
-    void Reset_Memory(){
-        for (int& i : RAM){i = 0x00;}
+uint8_t MEMORY::FetchRAM(uint16_t addr){
+    if (addr <= 0x1000 && addr >= 0x0){
+        return MEMORY::RAM[addr];
     }
-    uint8_t FetchRAM(uint16_t& addr){
-        return MEMORY::STACK[addr];
-    }
-    void WriteRAM(uint16_t& addr, uint16_t data, uint16_t& SP){
+    return (uint8_t)0x00;
+}
+void MEMORY::WriteRAM(uint16_t addr, uint16_t data){
+    if (addr <= 0x1000 && addr >= 0x0){
         MEMORY::RAM[addr] = data;
-        SP++;
-        return;
     }
+    return;
 }
