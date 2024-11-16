@@ -2,22 +2,18 @@
 #include <cstdint>
 #include <vector>
 
-struct opcode{
-    int index;
-    uint16_t(CPU::*operate)(void) = nullptr;
-};
-
 class CPU
 {
     private:
         BUS bus;
+
     public:
         CPU();
         ~CPU();
 
         uint8_t VRegs[16]; /* Register V0 to VF */
         uint16_t IR; /* Register "Index Register" */
-        uint8_t* SP; /* Register "Stack Pointer" */
+        uint8_t SP; /* Register "Stack Pointer" */
         uint8_t DT; /* Register "Delay Timer" */
         uint8_t ST; /* Register "Sounder Timer" */
         uint16_t* PC; /* Register "Pointer Counter" */
@@ -26,7 +22,7 @@ class CPU
         uint16_t SYS (uint16_t addr);               // 0nnn - SYS addr
         uint16_t CLS ();                            // 00E0 - CLS
         uint16_t RET ();                            // 00EE - RET
-        uint16_t JP  (uint16_t& addr);               // 1nnn - JP addr
+        uint16_t JP  (uint16_t& addr);              // 1nnn - JP addr
         uint16_t CALL(uint16_t addr);               // 2nnn - CALL addr
         uint16_t SE  (uint8_t VX, uint8_t byte);    // 3xkk - SE Vx, byte
         uint16_t SNE (uint8_t VX, uint8_t byte);    // 4xkk - SNE Vx, byte
@@ -44,10 +40,14 @@ class CPU
         uint16_t SHL (uint8_t& VX);                 // 8xyE - SHL Vx {, Vy}
         uint16_t SNE (uint8_t VX, uint8_t VY);      // 9xy0 - SNE Vx, Vy
 
-        /*OPCODE TABLE FUNCTIONS*/
 
         /*Functions to call*/
-        uint16_t Fetch_Function(uint8_t& PC);
-        uint16_t Fetch_Params(uint8_t& PC);
-        bool Execute();
+        bool Execute(uint8_t& Clock);
+        void Fetch_Function(uint8_t& PC);
+        void Fetch_Params(uint8_t& PC);
+
+        uint8_t FunctionOP = 0x0;
+
+        /*OPCODE TABLE FUNCTIONS*/
+        std::vector<uint16_t(*)(void)> OPTable;
 };

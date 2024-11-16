@@ -2,17 +2,18 @@
 #include <cstdint>
 #include <MEMORY.h>
 
+enum class DevicesConn 
+{
+    Stack = 0,
+    Heap = 1,
+    FrameBuffer = 2,
+    KeyBoard = 3,
+    ControllData = 4
+};
+
 class BUS
 {
     private:
-        enum class DevicesConn 
-        {
-            Stack = 0,
-            Heap = 1,
-            FrameBuffer = 2,
-            KeyBoard = 3,
-            ControllData = 4
-        };
         MEMORY Mem;
 
     public:
@@ -26,6 +27,7 @@ class BUS
         /* Set up the mem pointer class */
         void ConnectMem();
 
-        uint8_t Fetch_Mem(uint8_t& addr, DevicesConn deviceT);
-        void Write_Mem(uint8_t& addr, DevicesConn deviceT, uint8_t data, uint16_t& SP);
+        uint8_t Fetch_Mem(uint16_t& addr, DevicesConn deviceT);
+        constexpr uint16_t Fetch_Heap();
+        void Write_Mem(uint8_t& addr, DevicesConn deviceT, uint8_t data, uint8_t& SP);
 };

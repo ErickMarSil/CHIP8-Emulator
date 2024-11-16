@@ -34,12 +34,12 @@ uint8_t BUS::Fetch_Mem(uint8_t& addr, DevicesConn deviceT)
         return Mem.FetchRAM(addr);
     }
 }
-void BUS::Write_Mem(uint8_t& addr, DevicesConn deviceT, uint8_t data, uint16_t& SP)
+void BUS::Write_Mem(uint8_t& addr, DevicesConn deviceT, uint8_t data, uint8_t& SP)
 {
     if (addr >= addressLimits[(int)deviceT][0] && addr <= addressLimits[(int)deviceT][1])
     {
         Mem.WriteRAM(addr, data);
-        if ((int)deviceT == 0)
+        if ((int)deviceT == 0) // If wrote in stack, add one into Stack pointer
         {
             SP++;
         }
