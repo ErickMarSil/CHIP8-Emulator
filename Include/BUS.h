@@ -2,9 +2,11 @@
 #include <cstdint>
 #include <MEMORY.h>
 
-class BUS{
+class BUS
+{
     private:
-        enum class DevicesConn {
+        enum class DevicesConn 
+        {
             Stack = 0,
             Heap = 1,
             FrameBuffer = 2,
@@ -14,9 +16,7 @@ class BUS{
         MEMORY Mem;
 
     public:
-        uint16_t& SP;
-
-        BUS(uint16_t& SPparam);
+        BUS();
         ~BUS();
 
         /* Limits address for each device */
@@ -26,6 +26,6 @@ class BUS{
         /* Set up the mem pointer class */
         void ConnectMem();
 
-        uint8_t Fetch_Mem(uint16_t& addr, DevicesConn deviceT);
-        void Write_Mem(uint16_t& addr, DevicesConn deviceT, uint16_t data, uint16_t& SP);
+        uint8_t Fetch_Mem(uint8_t& addr, DevicesConn deviceT);
+        void Write_Mem(uint8_t& addr, DevicesConn deviceT, uint8_t data, uint16_t& SP);
 };

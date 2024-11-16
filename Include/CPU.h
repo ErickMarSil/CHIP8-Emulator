@@ -1,46 +1,53 @@
+#pragma once
 #include <cstdint>
-#include <string>
+#include <vector>
 
-class CPU{
+struct opcode{
+    int index;
+    uint16_t(CPU::*operate)(void) = nullptr;
+};
+
+class CPU
+{
+    private:
+        BUS bus;
     public:
         CPU();
         ~CPU();
 
-        int8_t VRegs[16]; /* Register V0 to VF */
+        uint8_t VRegs[16]; /* Register V0 to VF */
         uint16_t IR; /* Register "Index Register" */
-        uint8_t SP; /* Register "Stack Pointer" */
+        uint8_t* SP; /* Register "Stack Pointer" */
         uint8_t DT; /* Register "Delay Timer" */
         uint8_t ST; /* Register "Sounder Timer" */
-        uint8_t PC; /* Register "Pointer Counter" */
+        uint16_t* PC; /* Register "Pointer Counter" */
 
         /*OPCODES FUNCTION DECLARATION*/
-        uint16_t SYS();  uint16_t CLS(); uint16_t RET();  uint16_t JP(); 
-        uint16_t CALL(); uint16_t SE();  uint16_t SEN();  uint16_t LD();
-        uint16_t ADD();  uint16_t OR();  uint16_t AND();  uint16_t XOR(); 
-        uint16_t SUB();  uint16_t SHR(); uint16_t SUBN(); uint16_t SHL();
-        uint16_t SNE();
-
-        0nnn - SYS addr
-        00E0 - CLS 
-        00EE - RET
-        1nnn - JP addr
-        2nnn - CALL addr
-        3xkk - SE Vx, byte
-        4xkk - SNE Vx, byte
-        5xy0 - SE Vx, Vy
-        6xkk - LD Vx, byte
-        7xkk - ADD Vx, byte
-        8xy0 - LD Vx, Vy
-        8xy1 - OR Vx, Vy
-        8xy2 - AND Vx, Vy
-        8xy3 - XOR Vx, Vy
-        8xy4 - ADD Vx, Vy
-        8xy5 - SUB Vx, Vy
-        8xy6 - SHR Vx {, Vy}
-        8xy7 - SUBN Vx, Vy
-        8xyE - SHL Vx {, Vy}
-        9xy0 - SNE Vx, Vy
+        uint16_t SYS (uint16_t addr);               // 0nnn - SYS addr
+        uint16_t CLS ();                            // 00E0 - CLS
+        uint16_t RET ();                            // 00EE - RET
+        uint16_t JP  (uint16_t& addr);               // 1nnn - JP addr
+        uint16_t CALL(uint16_t addr);               // 2nnn - CALL addr
+        uint16_t SE  (uint8_t VX, uint8_t byte);    // 3xkk - SE Vx, byte
+        uint16_t SNE (uint8_t VX, uint8_t byte);    // 4xkk - SNE Vx, byte
+        uint16_t SE  (uint8_t VX, uint8_t VY);      // 5xy0 - SE Vx, Vy  
+        uint16_t LD  (uint8_t& VX, uint8_t byte);   // 6xkk - LD Vx, byte
+        uint16_t ADD (uint8_t& VX, uint8_t byte);   // 7xkk - ADD Vx, byte
+        uint16_t LD  (uint8_t& VX, uint8_t VY);     // 8xy0 - LD Vx, Vy 
+        uint16_t OR  (uint8_t& VX, uint8_t& VY);    // 8xy1 - OR Vx, Vy 
+        uint16_t AND (uint8_t& VX, uint8_t& VY);    // 8xy2 - AND Vx, Vy 
+        uint16_t XOR (uint8_t& VX, uint8_t& VY);    // 8xy3 - XOR Vx, Vy 
+        uint16_t ADD (uint8_t& VX, uint8_t VY);     // 8xy4 - ADD Vx, Vy 
+        uint16_t SUB (uint8_t& VX, uint8_t VY);     // 8xy5 - SUB Vx, Vy 
+        uint16_t SHR (uint8_t& VX);                 // 8xy6 - SHR Vx {, Vy}
+        uint16_t SUBN(uint8_t& VX, uint8_t VY);     // 8xy7 - SUBN Vx, Vy
+        uint16_t SHL (uint8_t& VX);                 // 8xyE - SHL Vx {, Vy}
+        uint16_t SNE (uint8_t VX, uint8_t VY);      // 9xy0 - SNE Vx, Vy
 
         /*OPCODE TABLE FUNCTIONS*/
-        uint16_t* TABLE[20];
-}
+
+        /*Functions to call*/
+        uint16_t Fetch_Function(uint8_t& PC);
+        uint16_t Fetch_Params(uint8_t& PC);
+        bool Execute();
+};

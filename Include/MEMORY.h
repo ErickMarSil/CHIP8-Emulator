@@ -1,7 +1,8 @@
 #include <cstdint>
 #include <iostream>
 
-class MEMORY {
+class MEMORY
+{
     private:
         uint8_t RAM[4096];
 
@@ -14,5 +15,5 @@ class MEMORY {
 
         /* Main functions to interact with RAM */
         uint8_t FetchRAM(uint16_t addr);
-        void WriteRAM(uint16_t addr, uint16_t data, uint16_t& SP);
+        void WriteRAM(uint16_t addr, uint16_t data);
 };
