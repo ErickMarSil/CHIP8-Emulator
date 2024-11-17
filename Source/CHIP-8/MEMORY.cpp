@@ -28,6 +28,3 @@ void MEMORY::WriteRAM(uint8_t addr, uint8_t data)
     }
     return;
 }
-uint32_t MEMORY::FetchHEAP(uint16_t addr){
-    
-}

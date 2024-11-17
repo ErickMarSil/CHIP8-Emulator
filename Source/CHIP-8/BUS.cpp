@@ -4,6 +4,9 @@
 
 BUS::BUS()
 {
+    MEMORY Mem;
+    Mem.Reset_Memory();
+
     // Define limits of each devices to call them
 
     //Memory 4K
@@ -11,23 +14,23 @@ BUS::BUS()
     addressLimits[0][1] = 0x128;
 
     //Framebuffer
-    addressLimits[1][0] = addressLimits[0][1] + 1;
+    addressLimits[1][0] = addressLimits[0][1];
     addressLimits[1][1] = 0x160;
 
     //Stack 64B
-    addressLimits[2][0] = addressLimits[1][1] + 1;
+    addressLimits[2][0] = addressLimits[1][1];
     addressLimits[2][1] = 0x161;
 
     //Keyboard state
-    addressLimits[3][0] = addressLimits[2][1] + 1;
+    addressLimits[3][0] = addressLimits[2][1];
     addressLimits[3][1] = 0x162;
 
     //Control data
-    addressLimits[4][0] = addressLimits[3][1] + 1;
+    addressLimits[4][0] = addressLimits[3][1];
     addressLimits[4][1] = 0x162;
 }
 
-uint8_t BUS::Fetch_Mem(uint8_t& addr, DevicesConn deviceT)
+uint8_t BUS::Fetch_Mem(uint8_t addr, DevicesConn deviceT)
 {
     if (addr >= addressLimits[(int)deviceT][0] && addr <= addressLimits[(int)deviceT][1])
     {
@@ -39,10 +42,8 @@ void BUS::Write_Mem(uint8_t& addr, DevicesConn deviceT, uint8_t data, uint8_t& S
     if (addr >= addressLimits[(int)deviceT][0] && addr <= addressLimits[(int)deviceT][1])
     {
         Mem.WriteRAM(addr, data);
-        if ((int)deviceT == 0) // If wrote in stack, add one into Stack pointer
-        {
-            SP++;
-        }
+        // If wrote in stack, add one into Stack pointer
+        if ((int)deviceT == 0) {SP++;}
     }
     return;
 }
