@@ -4,11 +4,6 @@
 
 BUS::BUS()
 {
-    MEMORY Mem;
-    Mem.Reset_Memory();
-
-    // Define limits of each devices to call them
-
     //Memory 4K
     addressLimits[0][0] = 0x00;
     addressLimits[0][1] = 0x128;
@@ -28,6 +23,11 @@ BUS::BUS()
     //Control data
     addressLimits[4][0] = addressLimits[3][1];
     addressLimits[4][1] = 0x162;
+}
+
+void SetMemory(MEMORY& memInstance)
+{
+    MEMORY Mem = memInstance;
 }
 
 uint8_t BUS::Fetch_Mem(uint8_t addr, DevicesConn deviceT)

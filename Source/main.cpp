@@ -1,10 +1,7 @@
 #include <iostream>
-#include <SDL2/SDL.h>
+#include "CPU.h"
 
-using namespace std;
-
-int main(){
-	bool teste = SDL_Init(SDL_INIT_AUDIO) > 0;
-	cout << teste << "\n";
+int main()
+{	
 	return 0;
 }

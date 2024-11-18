@@ -5,8 +5,4 @@ WORKDIR /Source
 RUN apt-get update make
 RUN make
 
-COPY Source/CHIP-8 && \\
-    Source/Display && \\
-    Source/Headers && \\
-    Soruce/main.cpp && \\
-    Include/*
+COPY .

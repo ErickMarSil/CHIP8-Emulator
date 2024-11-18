@@ -20,8 +20,10 @@ class BUS
         BUS();
         ~BUS();
 
-        /* Limits address for each device */
-        /* addrStack, addrHeap, addrFrameBuffer, addrKeyBoard, addrControllData */
+        void SetMemory(MEMORY& memInstance);
+        
+        // Limits address for each device
+        // addrStack, addrHeap, addrFrameBuffer, addrKeyBoard, addrControllData
         uint16_t addressLimits[5][2];
 
         /* Set up the mem pointer class */
