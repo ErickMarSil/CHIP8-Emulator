@@ -17,11 +17,6 @@ CPU::CPU()
     };
 }
 
-void SetBus(BUS& busInsntance)
-{
-    BUS bus = busInsntance;
-}
-
 void CPU::Reset()
 {
     // Set program counter in top of the heap in 0x200
@@ -304,6 +299,10 @@ u_int16_t CPU::OpD()
 
     I = VRegs[VX] | VRegs[VY];
     VRegs[15] = 0x1;
+
+    // Call function in SDL to print sprites
+
+    
 }
 u_int16_t CPU::OpE()
 {

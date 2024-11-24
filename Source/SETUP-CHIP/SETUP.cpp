@@ -4,20 +4,19 @@
 #include "MEMORY.h"
 #include "BUS.h"
 #include "CPU.h"
+#include "SCREEN.h"
 
 bool startup()
 {
-    // Make insertion of program in heap memory
-    MEMORY mem;
-    insert_program(mem);
 
-    // Set Instance of bus parsing the memory object
-    BUS bus;
-    bus.SetMemory(mem);
-
-    // Create new instance of CPU and set the bus
+    // Instaciations
     CPU cpu;
-    cpu.SetBus(bus);
+    BUS bus;
+    MEMORY mem;
+    SCREEN screen;
+
+    // Make insertion of program in heap memory
+    insert_program(mem);
 
     cpu.Execute();
 }

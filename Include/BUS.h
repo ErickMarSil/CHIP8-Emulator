@@ -15,12 +15,11 @@ class BUS
 {
     private:
         MEMORY Mem;
+        uint16_t& SP;
 
     public:
         BUS();
         ~BUS();
-
-        void SetMemory(MEMORY& memInstance);
         
         // Limits address for each device
         // addrStack, addrHeap, addrFrameBuffer, addrKeyBoard, addrControllData

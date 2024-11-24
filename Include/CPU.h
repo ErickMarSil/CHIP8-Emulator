@@ -13,7 +13,6 @@ class CPU
 
         // MAIN 
         void Reset();
-        void SetBus(BUS& busInsntance);
 
         // ALL CPU REGISTER IN CPU CHIP-8
             uint8_t VRegs[16]; // Register V0 to VF

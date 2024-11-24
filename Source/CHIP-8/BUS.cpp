@@ -2,8 +2,10 @@
 #include "BUS.h"
 #include "MEMORY.h"
 
-BUS::BUS()
+BUS::BUS(uint16_t* SP_pointer)
 {
+    SP = SP_pointer;
+
     //Memory 4K
     addressLimits[0][0] = 0x00;
     addressLimits[0][1] = 0x128;
@@ -25,11 +27,6 @@ BUS::BUS()
     addressLimits[4][1] = 0x162;
 }
 
-void SetMemory(MEMORY& memInstance)
-{
-    MEMORY Mem = memInstance;
-}
-
 uint8_t BUS::Fetch_Mem(uint8_t addr, DevicesConn deviceT)
 {
     if (addr >= addressLimits[(int)deviceT][0] && addr <= addressLimits[(int)deviceT][1])
@@ -37,7 +34,7 @@ uint8_t BUS::Fetch_Mem(uint8_t addr, DevicesConn deviceT)
         return Mem.FetchRAM(addr);
     }
 }
-void BUS::Write_Mem(uint8_t& addr, DevicesConn deviceT, uint8_t data, uint8_t& SP)
+void BUS::Write_Mem(uint8_t& addr, DevicesConn deviceT, uint8_t data)
 {
     if (addr >= addressLimits[(int)deviceT][0] && addr <= addressLimits[(int)deviceT][1])
     {
