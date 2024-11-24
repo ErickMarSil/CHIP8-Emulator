@@ -106,10 +106,10 @@ uint16_t CPU::Op0()
     switch (op)
     {
     case 0x0E0: // (CLS) Clear screen in frame buffer
-        for (uint8_t i; i < 0x160; i += 0x1)
+        for (uint8_t inc; inc < 0x160; inc += 0x1)
         {
-            uint8_t a = 0x0;
-            bus->Write_Mem(i, DevicesConn::FrameBuffer, 0x00);
+            uint8_t addr = inc + 0x128;
+            bus->Write_Mem(addr, DevicesConn::FrameBuffer, 0x00);
         }
         break;
     case 0x0EE: // (RET) Retunr to caller point
@@ -296,16 +296,21 @@ u_int16_t CPU::OpC()
 }
 u_int16_t CPU::OpD()
 {
-    // (DRW) Draw 
-    uint8_t VX = ParamsV[0];
-    uint8_t VY = ParamsV[1];
+    uint8_t height = ParamsV[2];
+    uint8_t x = ParamsV[0];
+    uint8_t y = ParamsV[1];
+    uint8_t addr = 0x0;
 
-    I = VRegs[VX] | VRegs[VY];
-    VRegs[15] = 0x1;
-
-    // Call function in SDL to print sprites
-
-    
+    for(uint8_t row = x; row < x + 0x8; row++)
+    {
+        // find respective x in address
+        // find respective y in address
+        for(uint8_t col = y; col < ParamsV[2]; col++)
+        {
+            addr = x * y;
+            bus->Write_Mem(addr, DevicesConn::FrameBuffer, 0x1);
+        }
+    }
 }
 u_int16_t CPU::OpE()
 {
