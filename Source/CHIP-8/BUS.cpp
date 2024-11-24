@@ -2,9 +2,9 @@
 #include "BUS.h"
 #include "MEMORY.h"
 
-BUS::BUS(uint16_t* SP_pointer)
+BUS::BUS(MEMORY* memRef)
 {
-    SP = SP_pointer;
+    Mem = memRef;
 
     //Memory 4K
     addressLimits[0][0] = 0x00;
@@ -31,16 +31,14 @@ uint8_t BUS::Fetch_Mem(uint8_t addr, DevicesConn deviceT)
 {
     if (addr >= addressLimits[(int)deviceT][0] && addr <= addressLimits[(int)deviceT][1])
     {
-        return Mem.FetchRAM(addr);
+        return Mem->FetchRAM(addr);
     }
 }
 void BUS::Write_Mem(uint8_t& addr, DevicesConn deviceT, uint8_t data)
 {
     if (addr >= addressLimits[(int)deviceT][0] && addr <= addressLimits[(int)deviceT][1])
     {
-        Mem.WriteRAM(addr, data);
-        // If wrote in stack, add one into Stack pointer
-        if ((int)deviceT == 0) {SP++;}
+        Mem->WriteRAM(addr, data);
     }
     return;
 }

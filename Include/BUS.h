@@ -14,11 +14,10 @@ enum class DevicesConn
 class BUS
 {
     private:
-        MEMORY Mem;
-        uint16_t& SP;
+        MEMORY* Mem;
 
     public:
-        BUS();
+        BUS(MEMORY* memRef);
         ~BUS();
         
         // Limits address for each device
@@ -29,5 +28,5 @@ class BUS
         void ConnectMem();
 
         uint8_t Fetch_Mem(uint8_t addr, DevicesConn deviceT);
-        void Write_Mem(uint8_t& addr, DevicesConn deviceT, uint8_t data, uint8_t& SP);
+        void Write_Mem(uint8_t& addr, DevicesConn deviceT, uint8_t data);
 };

@@ -4,16 +4,17 @@
 #include "CPU.h"
 #include "BUS.h"
 
-CPU::CPU()
+CPU::CPU(BUS* busRef)
 {
     Reset();
+    bus = busRef;
 
-    CPU::OPTable = 
+    CPU::OPTable =
     {
-        &CPU::Op0, &CPU::Op1, &CPU::Op2, &CPU::Op3,
-        &CPU::Op4, &CPU::Op5, &CPU::Op6, &CPU::Op7,
-        &CPU::Op8, &CPU::Op9, &CPU::OpA, &CPU::OpB,
-        &CPU::OpC, &CPU::OpD, &CPU::OpE, &CPU::OpF
+        &Op0, &Op1, &Op2, &Op3,
+        &Op4, &Op5, &Op6, &Op7,
+        &Op8, &Op9, &OpA, &OpB,
+        &OpC, &OpD, &OpE, &OpF
     };
 }
 
@@ -51,6 +52,8 @@ bool CPU::Execute()
 
             // Reduce Clock
             ReduceClock();
+
+            SP++;
         }
         else
         {
@@ -65,8 +68,8 @@ uint16_t CPU::Fetch()
 {
     uint8_t entire[2] = 
     {
-        bus.Fetch_Mem((PC >> 8), DevicesConn::Heap),
-        bus.Fetch_Mem((PC << 8), DevicesConn::Heap)
+        bus->Fetch_Mem((PC >> 8), DevicesConn::Heap),
+        bus->Fetch_Mem((PC << 8), DevicesConn::Heap)
     };
     FunctI = (entire[0] >> 4) & 0b0000;
 
@@ -106,7 +109,7 @@ uint16_t CPU::Op0()
         for (uint8_t i; i < 0x160; i += 0x1)
         {
             uint8_t a = 0x0;
-            bus.Write_Mem(i, DevicesConn::FrameBuffer, 0x00, SP);
+            bus->Write_Mem(i, DevicesConn::FrameBuffer, 0x00);
         }
         break;
     case 0x0EE: // (RET) Retunr to caller point

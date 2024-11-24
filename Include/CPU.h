@@ -5,10 +5,10 @@
 class CPU
 {
     private:
-        BUS bus;
+        BUS* bus;
 
     public:
-        CPU();
+        CPU(BUS* busRef);
         ~CPU();
 
         // MAIN 

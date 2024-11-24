@@ -20,11 +20,32 @@ struct ScreenProps{
         Uint32 FlagsRender = (SDL_WINDOW_OPENGL);
 };
 
-SCREEN::SCREEN()
+SCREEN::SCREEN(BUS* busRef)
 {
-    if (SDL_Init(SDL_INIT_VIDEO) > 0)
+    bus = busRef;
+
+    if (SDL_Init(SDL_INIT_VIDEO) != 0)
     {
-        // Set the black window
+        SDL_Log("Impossible to initialize: %s", SDL_GetError());
+        return;
+    }
+    
+    SDL_Quit();
+    return;
+}
+
+void SCREEN::Init()
+{
+    // Set the top address in the lookup
+    lookup = 0x128;
+    Init_Screen();
+}
+
+void SCREEN::Init_Screen()
+{
+    Reset();
+
+    // Set the black window
         window = SDL_CreateWindow
         (
             configs.screen_title,
@@ -50,24 +71,36 @@ SCREEN::SCREEN()
             0x0,
             0x0
         );
-    }
-    Init();
-}
-
-void SCREEN::Init()
-{
-    Reset();
-    uint8_t addr = 0x128;
-    bus.Write_Mem(addr, DevicesConn::FrameBuffer);
+        return;
 }
 
 void SCREEN::Reset()
 {
+    // Clean all pixels in screen
     for (uint8_t& i : SCREEN::pixels) {i = 0x0;}
+
+    // Clear in mnemory address all framebuffer
+    for (uint8_t inc; inc < 0x160; inc+=0x1)
+    {
+        uint8_t addr = lookup + inc;
+        bus->Write_Mem(addr, DevicesConn::FrameBuffer, 0x0);
+    }
+}
+
+void SCREEN::ReadBuffer()
+{
+    // Setting all pixels values in memory to pixels arr variable (make it easier)
+    for (uint8_t inc = 0x0; inc < 0x160; inc += 0x1)
+    {
+        uint8_t addr = lookup + inc;
+        pixels[inc] = bus->Fetch_Mem(addr, DevicesConn::FrameBuffer);
+    }
 }
 
 void SCREEN::Print()
 {
+    ReadBuffer();
+
     uint8_t ep; // (existing pixel) Representative pixel to (WARNING: CHANGING AFTER)
     for (uint8_t& i : SCREEN::pixels) 
     {
@@ -83,27 +116,38 @@ void SCREEN::Print()
         {
         case 0b0001: // (CHECK) pixel = white and action = white
             // Set (vf = 0x1)
+            (uint8_t&)VF = 0x1;
+            
             // Set (pixel = 0x0)
+            ep = 0x0;
+
             break;
         case 0b0010: // (CHECK) pixel = white and action = black
             // Set (vf = 0x0)
+            (uint8_t&)VF = 0x0;
+
             // Set (pixel - 0x1)
+            ep = 0x1;
+
             break;
         case 0b0100: // (CHECK) pixel = black and action = white
             // Set (vf = 0x0)
+            (uint8_t&)VF = 0x0;
+
             // Set (pixel = 0x0)
+            ep = 0x0;
+
             break;
         case 0b1000: // (CHECK) pixel = black and action = black
             // Set (vf = 0x0)
+            (uint8_t&)VF = 0x0;
+
             // Set (pixel = 0x0)
+            ep = 0x0;
+
             break;
         default:
             break;
         }
     }
-}
-
-void SCREEN::ReadBuffer()
-{
-    
 }
