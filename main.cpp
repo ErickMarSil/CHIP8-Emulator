@@ -6,6 +6,11 @@
 
 // SCREEN SECTION
 
+Screen::Screen(Cpu* cpuRef)
+{
+    cpu = cpuRef;
+}
+
 bool Screen::Init_Screen()
 {
     ScreenProps config = 
@@ -47,6 +52,7 @@ void Screen::Run_screen()
     while (trigged == true)
     {
         SDL_RenderClear(render);
+
     }
 }
 
@@ -62,8 +68,8 @@ uint16_t Memory::Fetch_Byte(uint8_t addr)
 {
     if (addr > 4096)
     {
-        std::cout << "overload memory, address (0x%s) not recognized!" << "\n";
-        return;
+        std::cout << "overload memory, address (0x" << addr << ") not recognized!" << "\n";
+        return 0x0;
     }
     return Memory::RAM[addr];
 }
@@ -71,7 +77,7 @@ void Memory::Write_Byte(uint8_t addr, uint8_t content)
 {
     if (addr > 4096)
     {
-        std::cout << "overload memory, address (0x%s) not recognized!" << "\n";
+        std::cout << "overload memory, address (0x" << addr << ") not recognized!" << "\n";
         return;
     }
     Memory::RAM[addr] = content;
@@ -104,6 +110,19 @@ void Memory::Load_Font()
     }
 }
 
+int Memory::Load_Script (char path[])
+{
+    // Loads the file into memory on 0x200 address
+    FILE* file = fopen(path, "rb");
+    if (file == NULL || sizeof(file) > 0x1024)
+    {
+        std::cout << "Not possible read the file! file empty or to big";
+        return 1;
+    }
+    rewind(file);
+    fwrite(&RAM[0x200], sizeof(file), 1, file); // write file into memory 0x200
+}
+
 // BUS SECTION
 
 Bus::Bus(Memory* memRef)
@@ -122,7 +141,7 @@ void Bus::ConnMem()
         i = mem->Get_Pointer(addr);
     }
     // Start the pointer at arrays (Framebuffer)
-    uint8_t inc = 0x0;
+    inc = 0x0;
     for (uint8_t* i : Bus::FRAMEBUFFER)
     {
         uint8_t addr = 0x160 + inc;
@@ -179,13 +198,6 @@ void Cpu::Reset()
     for (uint8_t& i : VRegs){i = 0x0;}
 
     ListOld = {0x1};
-}
-
-bool Chip8::Init_Chip8(std::string path_file_argument)
-{
-    Memory mem;
-    Bus bus(&mem);
-    Cpu Cpu(&bus);
 }
 
 bool Cpu::Execute()
@@ -473,19 +485,33 @@ u_int16_t Cpu::OpF()
 {
     return 0x0;
 }
-
-
-void Chip8::Run_Chip8()
+uint8_t Cpu::GenerateRND()
 {
-    
+    return 0x0;
+}
+
+bool Chip8::Init_Chip8(char* argsv[])
+{
+    // Initialize the chip 8 structure
+    Memory mem;
+    mem.Load_Font();
+    mem.Load_Script(*argsv);
+
+    Bus bus(&mem);
+    Cpu cpu(&bus);
+}
+Cpu* Chip8::Get_CpuPtr()
+{
+    return cpu;
 }
 
 int main(int args, char* argsv[])
 {
-    // Initialize the chip 8 structure
-
+    Chip8* chip8;
+    chip8->Init_Chip8(argsv);
+    
     // Initialize the screen
     Screen* screen;
     screen->Init_Screen();
-    // screen->Run_screen();
+    screen->Run_screen();
 }

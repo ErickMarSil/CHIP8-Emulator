@@ -5,39 +5,6 @@
 #include <string>
 #include <vector>
 
-#ifndef SDL_PROPS
-#define SDL_PROPS
-
-class Screen
-{
-    private:
-        bool trigged = false;
-
-    public:
-        uint32_t Devices_Flags = (SDL_INIT_VIDEO);
-        SDL_Window* window;
-        SDL_Renderer* render;
-
-        struct ScreenProps
-        {
-            char* screen_title;
-            int screen_width;
-            int screen_height;
-            int screen_pos_x;
-            int screen_pos_y;
-
-            int aspect_ratio = 10;
-
-            uint32_t bg_color = 0x0;
-            uint32_t fg_color = 0x0;
-        };
-
-        bool Init_Screen();
-        void Run_screen();
-};
-
-#endif
-
 #ifndef CHIP_8
 #define CHIP_8
 
@@ -55,6 +22,7 @@ class Memory
         void Write_Byte(uint8_t addr, uint8_t content);
 
         void Load_Font();
+        int Load_Script(char path[]);
 };
 class Bus
 {
@@ -65,7 +33,6 @@ class Bus
 
     public:
         Bus(Memory* memRef);
-        ~Bus();
 
         void ConnMem();
         uint8_t Fetch_Byte(uint8_t addr, int device);
@@ -78,7 +45,6 @@ class Cpu
 
     public:
         Cpu(Bus* busRef);
-        ~Cpu();
 
         // MAIN 
             void Reset();
@@ -117,7 +83,43 @@ class Chip8
         Bus* bus;
 
     public:
-        bool Init_Chip8(std::string path_file_argument);
-        void Run_Chip8();
+        bool Init_Chip8(char* argsv[]);
+        Cpu* Get_CpuPtr();
 };
+#endif
+
+#ifndef SDL_PROPS
+#define SDL_PROPS
+
+class Screen
+{
+    private:
+        bool trigged = false;
+        Cpu* cpu = nullptr;
+
+    public:
+        Screen(Cpu* cpuRef);
+
+        uint32_t Devices_Flags = (SDL_INIT_VIDEO);
+        SDL_Window* window;
+        SDL_Renderer* render;
+
+        struct ScreenProps
+        {
+            char* screen_title;
+            int screen_width;
+            int screen_height;
+            int screen_pos_x;
+            int screen_pos_y;
+
+            int aspect_ratio = 10;
+
+            uint32_t bg_color = 0x0;
+            uint32_t fg_color = 0x0;
+        };
+
+        bool Init_Screen();
+        void Run_screen();
+};
+
 #endif
