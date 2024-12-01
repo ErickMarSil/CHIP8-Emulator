@@ -5,48 +5,27 @@ LDFLAGS = `sdl2-config --libs`
 
 all: main
 
-main: cpu.o screen.o bus.o memory.o
-	$(CXX) $(CXXFLAGS) ./Source/main.cpp cpu.o screen.o bus.o memory.o -o main $(LDFLAGS)
+main:
+	$(CXX) $(CXXFLAGS) ./main.cpp -o ./main $(LDFLAGS)
 
-main.o:
-	$(CXX) -c ./Source/main.cpp -o main.o
+# all: main
 
-cpu.o:
-	$(CXX) -c ./Source/cpu.cpp -o cpu.o
+# main: cpu.o bus.o memory.o
+# 	$(CXX) $(CXXFLAGS) -c ./Source/main.cpp cpu.o bus.o memory.o -o main $(LDFLAGS)
 
-screen.o:
-	$(CXX) -c $(CXXFLAGS) ./Source/screen.cpp -o screen.o $(LDFLAGS)
+# main.o:
+# 	$(CXX) ./Source/main.cpp -o main.o
 
-bus.o:
-	$(CXX) -c ./Source/bus.cpp -o bus.o
+# cpu.o:
+# 	$(CXX) -c ./Source/cpu.cpp -o cpu.o
 
-memory.o:
-	$(CXX) -c ./Source/memory.cpp -o memory.o
+# bus.o:
+# 	$(CXX) -c ./Source/bus.cpp -o bus.o
 
-.PHONY: clean
+# memory.o:
+# 	$(CXX) -c ./Source/memory.cpp -o memory.o
 
-clean:
-	rm *.o
+# .PHONY: clean
 
-# # Compiler
-# CXX = g++
-
-# # Compiler and linker flags
-# CXXFLAGS = -std=c++17 -Wall `sdl2-config --cflags`
-# LDFLAGS = `sdl2-config --libs`
-
-# # Target executable
-# TARGET = sdl_app
-
-# # Source file
-# SRC = ./Source/screen.cpp
-
-# # Build rule
-# all: $(TARGET)
-
-# $(TARGET): $(SRC)
-# 	$(CXX) $(CXXFLAGS) $(SRC) -o $(TARGET) $(LDFLAGS)
-
-# # Clean rule
 # clean:
-# 	rm -f $(TARGET)
+# 	rm *.o

@@ -2,45 +2,13 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include "SDL2/SDL.h"
 
 #include "memory.hpp"
 #include "bus.hpp"
 #include "cpu.hpp"
 
-
-// SDL variables
-ScreenProps configs;
-SDL_Window* window;
-SDL_Renderer* render;
-
-// System poiter (system projection)
-uint8_t* VF; // porpouse: for colision
-uint16_t lookup; // similar to stack pointer for screen
-
-// Instaciations of devices
-MEMORY mem;
-BUS bus(&mem);
-CPU cpu(&bus);
-
-bool close; // Trigger to check close and oppen
-uint8_t pixels[1024]; // All pixels variable to set
-
-struct ScreenProps{
-    public:
-        // Window constraints --------------
-        int screen_width_x;
-        int screen_height_y;
-        int screen_position_y;
-        int screen_position_x;
-
-        char* screen_title;
-
-        // Window setups flags -------------
-        Uint32 FlagsWindow;
-
-        // Render setups flags -------------
-        Uint32 FlagsRender;
-};
+#include "main.hpp"
 
 void insert_program(MEMORY& mem, std::string path)
 {
@@ -104,7 +72,7 @@ void Init_Screen()
 
     // Set the render
         render = SDL_CreateRenderer(window, 1, configs.FlagsRender);
-        SDL_SetRenderDrawColor(render, 0x255, 0x255, 0x255, 0x0);
+        SDL_SetRenderDrawColor(render, 0x0, 0x0, 0x0, 0x0);
 
     while (!close)
     {
@@ -126,8 +94,11 @@ void Print()
         y_coord = std::floor(ind / configs.screen_height_y); // relative index at Y axis
 
         // Draw a 1:1 square in the square and print it
-        SDL_Rect square = {1, 1, x_coord, y_coord};
-        SDL_RenderFillRect(render, &square);
+        if (pixel != 0x0)
+        {
+            SDL_Rect square = {1, 1, x_coord, y_coord};
+            SDL_RenderFillRect(render, &square);
+        }
 
         ind++;
         Print();
@@ -174,11 +145,12 @@ bool startup(std::string path)
     return true;
 }
 
-int main(std::string args)
-{
-	if (startup(args) == true)
+int main(int argc, char* argv[])
+{    
+	if (startup(argv[1]) == true)
 	{
 		return 0;
 	}
-	// throw "failed in starting up the system! try again!";
+	throw "failed in starting up the system! try again!";
+    return 1;
 }
