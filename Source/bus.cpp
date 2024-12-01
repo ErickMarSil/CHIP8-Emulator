@@ -36,7 +36,3 @@ void BUS::Write_Mem(uint8_t& addr, DevicesConn deviceT, uint8_t data)
     }
     return;
 }
-int main()
-{
-    return 0;
-}

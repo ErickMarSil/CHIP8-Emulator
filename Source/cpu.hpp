@@ -5,6 +5,7 @@
 #include <stdio.h>
 
 #include "bus.hpp"
+#include "screen.hpp"
 
 class CPU
 {

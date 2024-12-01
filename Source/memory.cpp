@@ -28,9 +28,3 @@ void MEMORY::WriteRAM(uint8_t addr, uint8_t data)
     }
     return;
 }
-
-int main()
-{
-    std::cout << "caller from nowhere" << "\n";
-    return 0;
-}

@@ -5,13 +5,11 @@
 
 #include "bus.hpp"
 
-
-
 struct ScreenProps{
     public:
         // Window constraints --------------
-        int screen_width_y;
-        int screen_height_x;
+        int screen_width_x;
+        int screen_height_y;
         int screen_position_y;
         int screen_position_x;
 
@@ -49,4 +47,6 @@ class SCREEN
         void Print();   // Draw in screen informations
 
         uint8_t pixels[1024]; // All pixels variable to set
+
+        bool close; // Trigger to check close and oppen
 };

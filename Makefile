@@ -1,27 +1,52 @@
 # Flags to compilation
 CXX = g++
-CXXFLAGS = -Wall -g
-LDFLAGS = -lSDL2
+CXXFLAGS = -std=c++17 -Wall `sdl2-config --cflags`
+LDFLAGS = `sdl2-config --libs`
 
-all: main # clean
+all: main
 
-main: main.o
-	$(CXX) main.o - o main $(CXXFLAGS) $(LDFLAGS)
+main: cpu.o screen.o bus.o memory.o
+	$(CXX) $(CXXFLAGS) ./Source/main.cpp cpu.o screen.o bus.o memory.o -o main $(LDFLAGS)
 
-main.o: ./Source/main.cpp bus.o cpu.o memory.o screen.o
-	$(CXX) ./Source/main.cpp -c memory.o -c bus.o -c cpu.o screen.o -o main.o
+main.o:
+	$(CXX) -c ./Source/main.cpp -o main.o
 
-cpu.o: ./Source/cpu.cpp ./Source/cpu.hpp bus.o
-	$(CXX) ./Source/cpu.cpp -c bus.o -o cpu.o
+cpu.o:
+	$(CXX) -c ./Source/cpu.cpp -o cpu.o
 
-screen.o: ./Source/screen.cpp ./Source/screen.hpp bus.o
-	$(CXX) ./Source/screen.cpp -c bus.o -o screen.o
+screen.o:
+	$(CXX) -c $(CXXFLAGS) ./Source/screen.cpp -o screen.o $(LDFLAGS)
 
-bus.o: ./Source/bus.cpp ./Source/bus.hpp memory.o
-	$(CXX) ./Source/bus.cpp -c memory.o -o bus.o
+bus.o:
+	$(CXX) -c ./Source/bus.cpp -o bus.o
 
 memory.o:
-	$(CXX) ./Source/memory.cpp ./Source/memory.hpp -o memory.o
+	$(CXX) -c ./Source/memory.cpp -o memory.o
 
+.PHONY: clean
+
+clean:
+	rm *.o
+
+# # Compiler
+# CXX = g++
+
+# # Compiler and linker flags
+# CXXFLAGS = -std=c++17 -Wall `sdl2-config --cflags`
+# LDFLAGS = `sdl2-config --libs`
+
+# # Target executable
+# TARGET = sdl_app
+
+# # Source file
+# SRC = ./Source/screen.cpp
+
+# # Build rule
+# all: $(TARGET)
+
+# $(TARGET): $(SRC)
+# 	$(CXX) $(CXXFLAGS) $(SRC) -o $(TARGET) $(LDFLAGS)
+
+# # Clean rule
 # clean:
-#     rm -f $(binaries) *.o
+# 	rm -f $(TARGET)

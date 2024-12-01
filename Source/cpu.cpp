@@ -10,6 +10,7 @@ CPU::CPU(BUS* busRef)
 {
     Reset();
     bus = busRef;
+
     // CPU::OPTable =
     // {
     //     CPU::Op0, CPU::Op1, CPU::Op2, CPU::Op3,
@@ -17,7 +18,7 @@ CPU::CPU(BUS* busRef)
     //     CPU::Op8, CPU::Op9, CPU::OpA, CPU::OpB,
     //     CPU::OpC, CPU::OpD, CPU::OpE, CPU::OpF
     // };
-
+    
 }
 
 void CPU::Reset()
@@ -340,17 +341,19 @@ u_int16_t CPU::OpD()
         addr = y * x * inc;
         bus->Write_Mem(addr, DevicesConn::FrameBuffer, 0x1);
     }
+    return 0x0;
 }
 u_int16_t CPU::OpE()
 {
-    
+    return 0x0;
 }
 u_int16_t CPU::OpF()
 {
-    
+    return 0x0;
 }
 
 uint8_t CPU::GenerateRND() // PSEUDO ALGORITHMICS ( LINEAR CONGRUENT )
 {
     // to add later
+    return 0x0;
 }

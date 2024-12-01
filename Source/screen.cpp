@@ -8,16 +8,17 @@ SCREEN::SCREEN(BUS* busRef)
 {
     
     // Window constraints --------------
-    configs.screen_width_y = 60;
-    configs.screen_height_x = 30;
+    configs.screen_title = "CHIP-8";
+    configs.screen_width_x = 64;
+    configs.screen_height_y = 32;
     configs.screen_position_y = 0;
     configs.screen_position_x = 0;
 
     // Window setups flags -------------
-    Uint32 FlagsWindow = (SDL_WINDOW_OPENGL);
+    Uint32 FlagsWindow = (SDL_WINDOW_SHOWN);
 
     // Render setups flags -------------
-    Uint32 FlagsRender = (SDL_WINDOW_OPENGL);
+    Uint32 FlagsRender = (SDL_RENDERER_ACCELERATED);
 
     bus = busRef;
 
@@ -31,9 +32,7 @@ SCREEN::SCREEN(BUS* busRef)
         SDL_Log("Impossible to initialize: %s", SDL_GetError());
         return;
     }
-    
     SDL_Quit();
-    return;
 }
 
 void SCREEN::Init_Screen()
@@ -46,27 +45,19 @@ void SCREEN::Init_Screen()
             configs.screen_title,
             configs.screen_position_x,
             configs.screen_position_y,
-            configs.screen_height_x,
-            configs.screen_width_y,
+            configs.screen_height_y,
+            configs.screen_width_x,
             configs.FlagsWindow
         );
 
-        // Set the render
-        render = SDL_CreateRenderer
-        (
-            window,
-            -1,
-            configs.FlagsRender
-        );
-        SDL_SetRenderDrawColor
-        (
-            render,
-            0x0,
-            0x0,
-            0x0,
-            0x0
-        );
-        return;
+    // Set the render
+        render = SDL_CreateRenderer(window, 1, configs.FlagsRender);
+        SDL_SetRenderDrawColor(render, 0x255, 0x255, 0x255, 0x0);
+
+    while (!close)
+    {
+        SDL_RenderPresent(render);
+    }
 }
 
 void SCREEN::Reset()
@@ -97,21 +88,19 @@ void SCREEN::Print()
     ReadBuffer();
     int x_coord;
     int y_coord;
+    int ind = 1;
 
     for (uint8_t& pixel : pixels)
     {
-        // Draw a 1:1 square in the square
-        SDL_Rect square;
-        square.h = 1;
-        square.w = 1;
+        // Calculate relative position
+        x_coord = ind % configs.screen_width_x; // relative index at X axis
+        y_coord = std::floor(ind / configs.screen_height_y); // relative index at Y axis
 
-        square.x = x_coord;
-        square.y = y_coord;
+        // Draw a 1:1 square in the square and print it
+        SDL_Rect square = {1, 1, x_coord, y_coord};
+        SDL_RenderFillRect(render, &square);
+
+        ind++;
+        Print();
     }
-    // Writes a rectangle with
-}
-
-int main()
-{
-    return 0;
 }
