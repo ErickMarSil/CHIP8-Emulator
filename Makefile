@@ -3,25 +3,25 @@ CXX = g++
 CXXFLAGS = -Wall -g
 LDFLAGS = -lSDL2
 
-# Targets Sources
-all: main
-memoryT:Source/CHIP-8/MEMORY.cpp
-busT:Source/CHIP-8/BUS.cpp
-cpuT:Source/CHIP-8/CPU.cpp
+all: main # clean
 
-# Targets Compilation
-mem:
-    $(CXX) $(CXXFLAGS) memoryT -o Source/CHIP-8/MEMORY.o $(LDFLAGS)
+main: main.o
+	$(CXX) main.o - o main $(CXXFLAGS) $(LDFLAGS)
 
-bus:
-    $(CXX) $(CXXFLAGS) busT -o Source/CHIP-8/BUS.o $(LDFLAGS)
+main.o: ./Source/main.cpp bus.o cpu.o memory.o screen.o
+	$(CXX) ./Source/main.cpp -c memory.o -c bus.o -c cpu.o screen.o -o main.o
 
-cpu:
-    $(CXX) $(CXXFLAGS) cpuT	-o Source/CHIP-8/CPU.o $(LDFLAGS)
+cpu.o: ./Source/cpu.cpp ./Source/cpu.hpp bus.o
+	$(CXX) ./Source/cpu.cpp -c bus.o -o cpu.o
 
-main: mem, bus, cpu
-    $(CXX) $(CXXFLAGS) main.cpp -o main $(LDFLAGS)
+screen.o: ./Source/screen.cpp ./Source/screen.hpp bus.o
+	$(CXX) ./Source/screen.cpp -c bus.o -o screen.o
 
-# Clean main
-clean:
-    rm -f main
+bus.o: ./Source/bus.cpp ./Source/bus.hpp memory.o
+	$(CXX) ./Source/bus.cpp -c memory.o -o bus.o
+
+memory.o:
+	$(CXX) ./Source/memory.cpp ./Source/memory.hpp -o memory.o
+
+# clean:
+#     rm -f $(binaries) *.o
